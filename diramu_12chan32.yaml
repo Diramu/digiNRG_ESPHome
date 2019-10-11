@@ -6,7 +6,8 @@ substitutions:
 # frequency of local supply 50 or 60Hz
   frequency: 50Hz
 #SCT-013-000 100A/50ma - 32498
-  gain_ct100A: '26077'
+  #gain_ct100A: '26077'
+  gain_ct100A: '32498'
 # SCT-013-050 50A/1V - 15420
   gain_ct50A: '15420'
 #SCT-013-030 30A/1V - 9210
@@ -22,12 +23,6 @@ esphome:
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_pass
-#  manual_ip:
-#    static_ip: 192.168.107.43
-    # Set this to the IP address of the router. Often ends with .1
-#    gateway: 192.168.107.1
-    # The subnet of the network. 255.255.255.0 works for most home networks.
-#    subnet: 255.255.255.0
 
 # Enable logging
 logger:
@@ -68,6 +63,9 @@ sensor:
       current:
         name: ${disp_name} CT1 Amps
         id: ct1Amps
+      power:
+        name: ${disp_name} CT1 Pwr
+        id: ct1Pwr
       gain_voltage: ${gain_v}
 # Voltage using a 9VAC power transformer
 # Note: If you can not get the voltage correct with the highest gain of 65535, uncomment the 2.0 multiply filter above and lower the gain as needed
@@ -76,6 +74,9 @@ sensor:
       current:
         name: ${disp_name} CT2 Amps
         id: ct2Amps
+      power:
+        name: ${disp_name} CT2 Pwr
+        id: ct2Pwr
       gain_ct: ${gain_ct100A}
 # Current calibration using a 100A/50ma SCT-013-000
 #      gain_ct: 8650
@@ -84,6 +85,9 @@ sensor:
       current:
         name: ${disp_name} CT3 Amps
         id: ct3Amps
+      power:
+        name: ${disp_name} CT3 Pwr
+        id: ct3Pwr
       gain_ct: ${gain_ct30A}
 # Current calibration using a 30A/1V SCT-013-030
     frequency:
@@ -103,6 +107,9 @@ sensor:
       current:
         name: ${disp_name} CT4 Amps
         id: ct4Amps
+      power:
+        name: ${disp_name} CT4 Pwr
+        id: ct4Pwr
       gain_voltage: 45200
       gain_ct: ${gain_ct30A}
 # Current calibration using a 30A/1V SCT-013-030
@@ -110,12 +117,18 @@ sensor:
       current:
         name: ${disp_name} CT5 Amps
         id: ct5Amps
+      power:
+        name: ${disp_name} CT5 Pwr
+        id: ct5Pwr
       gain_ct: ${gain_ct30A}
 # Current calibration using a 30A/1V SCT-013-030
     phase_c:
       current:
         name: ${disp_name} CT6 Amps
         id: ct6Amps
+      power:
+        name: ${disp_name} CT6 Pwr
+        id: ct6Pwr
       gain_ct: ${gain_ct30A}
 # Current calibration using a 30A/1V SCT-013-030
     frequency:
@@ -123,6 +136,7 @@ sensor:
     line_frequency: ${frequency}
     gain_pga: 1X
     update_interval: ${update_time}    
+
   - platform: atm90e32
     cs_pin: 15
     phase_a:
@@ -135,20 +149,29 @@ sensor:
       current:
         name: ${disp_name} CT7 Amps
         id: ct7Amps
+      power:
+        name: ${disp_name} CT7 Pwr
+        id: ct7Pwr
       gain_voltage: ${gain_v}
-      #gain_ct: ${gain_ct30A} * 595 / 549 
-      gain_ct: 9631
+      gain_ct: ${gain_ct30A}
+      #gain_ct: 9631
 # Current calibration using a 30A/1V SCT-013-030
     phase_b:
       current:
         name: ${disp_name} CT8 Amps
         id: ct8Amps
+      power:
+        name: ${disp_name} CT8 Pwr
+        id: ct8Pwr
       gain_ct: ${gain_ct30A}
 # Current calibration using a 30A/1V SCT-013-030
     phase_c:
       current:
         name: ${disp_name} CT9 Amps
         id: ct9Amps
+      power:
+        name: ${disp_name} CT9 Pwr
+        id: ct9Pwr
       gain_ct: ${gain_ct30A}
 # Current calibration using a 30A/1V SCT-013-030
     frequency:
@@ -168,6 +191,9 @@ sensor:
       current:
         name: ${disp_name} CT10 Amps
         id: ct10Amps
+      power:
+        name: ${disp_name} CT10 Pwr
+        id: ct10Pwr
       gain_voltage: ${gain_v}
       gain_ct: ${gain_ct30A}
 # Current calibration using a 30A/1V SCT-013-030
@@ -175,12 +201,18 @@ sensor:
       current:
         name: ${disp_name} CT11 Amps
         id: ct11Amps
+      power:
+        name: ${disp_name} CT11 Pwr
+        id: ct11Pwr
       gain_ct: ${gain_ct30A}
 # Current calibration using a 100A/50ma SCT-013-000      
     phase_c:
       current:
         name: ${disp_name} CT12 Amps
         id: ct12Amps
+      power:
+        name: ${disp_name} CT12 Pwr
+        id: ct12Pwr
       gain_ct: ${gain_ct30A}
 # Current calibration using a 30A/1V SCT-013-030
     frequency:
@@ -194,7 +226,7 @@ sensor:
     id: ct1Watts
     lambda: return id(ct1Amps).state * id(ic1Volts).state;
     accuracy_decimals: 0
-    unit_of_measurement: W
+    unit_of_measurement: VA
     icon: "mdi:flash-circle"
     update_interval: ${update_time}         
   - platform: template
@@ -202,7 +234,7 @@ sensor:
     id: ct2Watts
     lambda: return id(ct2Amps).state * id(ic1Volts).state;
     accuracy_decimals: 0
-    unit_of_measurement: W
+    unit_of_measurement: VA
     icon: "mdi:flash-circle"
     update_interval: ${update_time}         
   - platform: template
@@ -210,7 +242,7 @@ sensor:
     id: ct3Watts
     lambda: return id(ct3Amps).state * id(ic1Volts).state;
     accuracy_decimals: 0
-    unit_of_measurement: W
+    unit_of_measurement: VA
     icon: "mdi:flash-circle"
     update_interval: ${update_time}         
   - platform: template
@@ -218,7 +250,7 @@ sensor:
     id: ct4Watts
     lambda: return id(ct4Amps).state * id(ic2Volts).state;
     accuracy_decimals: 0
-    unit_of_measurement: W
+    unit_of_measurement: VA
     icon: "mdi:flash-circle"
     update_interval: ${update_time}         
   - platform: template
@@ -226,7 +258,7 @@ sensor:
     id: ct5Watts
     lambda: return id(ct5Amps).state * id(ic2Volts).state;
     accuracy_decimals: 0
-    unit_of_measurement: W
+    unit_of_measurement: VA
     icon: "mdi:flash-circle"
     update_interval: ${update_time}         
   - platform: template
@@ -234,7 +266,7 @@ sensor:
     id: ct6Watts
     lambda: return id(ct6Amps).state * id(ic2Volts).state;
     accuracy_decimals: 0
-    unit_of_measurement: W
+    unit_of_measurement: VA
     icon: "mdi:flash-circle"
     update_interval: ${update_time}         
   - platform: template
@@ -242,7 +274,7 @@ sensor:
     id: ct7Watts
     lambda: return id(ct7Amps).state * id(ic3Volts).state;
     accuracy_decimals: 0
-    unit_of_measurement: W
+    unit_of_measurement: VA
     icon: "mdi:flash-circle"
     update_interval: ${update_time}         
   - platform: template
@@ -250,7 +282,7 @@ sensor:
     id: ct8Watts
     lambda: return id(ct8Amps).state * id(ic3Volts).state;
     accuracy_decimals: 0
-    unit_of_measurement: W
+    unit_of_measurement: VA
     icon: "mdi:flash-circle"
     update_interval: ${update_time}         
   - platform: template
@@ -258,7 +290,7 @@ sensor:
     id: ct9Watts
     lambda: return id(ct9Amps).state * id(ic3Volts).state;
     accuracy_decimals: 0
-    unit_of_measurement: W
+    unit_of_measurement: VA
     icon: "mdi:flash-circle"
     update_interval: ${update_time}         
   - platform: template
@@ -266,7 +298,7 @@ sensor:
     id: ct10Watts
     lambda: return id(ct10Amps).state * id(ic4Volts).state;
     accuracy_decimals: 0
-    unit_of_measurement: W
+    unit_of_measurement: VA
     icon: "mdi:flash-circle"
     update_interval: ${update_time}         
   - platform: template
@@ -274,7 +306,7 @@ sensor:
     id: ct11Watts
     lambda: return id(ct11Amps).state * id(ic4Volts).state;
     accuracy_decimals: 0
-    unit_of_measurement: W
+    unit_of_measurement: VA
     icon: "mdi:flash-circle"
     update_interval: ${update_time}         
   - platform: template
@@ -282,7 +314,7 @@ sensor:
     id: ct12Watts
     lambda: return id(ct12Amps).state * id(ic4Volts).state;
     accuracy_decimals: 0
-    unit_of_measurement: W
+    unit_of_measurement: VA
     icon: "mdi:flash-circle"
     update_interval: ${update_time}         
     
@@ -292,3 +324,7 @@ switch:
 time:
   - platform: sntp
     id: sntp_time    
+    timezone: 'Australia/Sydney'
+
+
+
